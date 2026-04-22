@@ -10,7 +10,7 @@
 
 ---
 
-## 🚀 START BUILDING TODAY - 100% FREE
+## 🚀 START BUILDING TODAY
 
 ### [👉 GET FREE API KEY (developers.freefirecommunity.com) 👈](https://developers.freefirecommunity.com)
 
@@ -170,19 +170,6 @@ echo $response;
 
 ---
 
-## 🎯 Pricing
-
-| Tier | Requests/Hour | Price | Features |
-|------|---------------|-------|----------|
-| **Free** | 100 | $0 | All endpoints |
-| **Starter** | 1,000 | $9/mo | Priority support |
-| **Pro** | 10,000 | $29/mo | API analytics |
-| **Enterprise** | Custom | Custom | Dedicated support |
-
-**[→ View pricing and upgrade](https://developers.freefirecommunity.com/en/pricing)**
-
----
-
 ## 📖 Documentation
 
 Everything you need to get started:
@@ -194,7 +181,7 @@ Everything you need to get started:
 ## 🤝 Community & Support
 
 ### Get Help
-- 📧 **Email**: support@freefirecommunity.com
+- 📧 **Email**: developers@freefirecommunity.com
 - 💬 **Forum**: [developers.freefirecommunity.com/community](https://www.freefirecommunity.com/)
 - 🐛 **GitHub Issues**: [Report bugs](https://github.com/ashqking/Free-Fire-API/issues)
 - 💡 **Feature Requests**: [GitHub Discussions](https://github.com/ashqking/Free-Fire-API/discussions)
@@ -208,8 +195,8 @@ Everything you need to get started:
 
 ## 📈 Statistics
 
-- **50,000+** Active Developers
-- **500+ Million** API Requests/Month
+- **1,000+** Active Developers
+- **1+ Million** API Requests/Month
 - **99.9%** Uptime SLA
 - **7** Languages Supported
 - **50+** API Endpoints
@@ -284,15 +271,14 @@ This is a **community project** and is **NOT** affiliated with, endorsed by, or 
 ## 🎓 Learn More
 
 - 📖 [Official Documentation](https://docs.freefirecommunity.com)
-- 🎥 [Video Tutorials](https://youtube.com/@freefirecommunityforum)
-- 🗣️ [Community Forum](https://developers.freefirecommunity.com/community)
+- 🗣️ [Community Forum](https://www.freefirecommunity.com/community)
 
 ---
 
 ## 📞 Quick Contact
 
 **Have questions?**
-- 📧 Email: support@freefirecommunity.com
+- 📧 Email: developers@freefirecommunity.com
 - 💬 Chat: [developers.freefirecommunity.com](https://developers.freefirecommunity.com)
 - 🐛 GitHub: [@ashqking](https://github.com/ashqking)
 
@@ -315,6 +301,6 @@ This is a **community project** and is **NOT** affiliated with, endorsed by, or 
 
 ---
 
-Last Updated: October 29, 2025 | [Docs](https://docs.freefirecommunity.com) | [GitHub](https://github.com/ashqking/Free-Fire-API)
+Last Updated: April 22, 2026 | [Docs](https://docs.freefirecommunity.com) | [GitHub](https://github.com/ashqking/Free-Fire-API)
 
 </div>
