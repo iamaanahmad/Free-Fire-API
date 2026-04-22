@@ -1,0 +1,1028 @@
+openapi: 3.0.3
+info:
+  title: Free Fire API - Community Edition
+  version: 2.1.0
+  description: |
+    # Free Fire REST API - Get Player Stats, Match Data, Leaderboards & More
+    
+    The **Free Fire API** provides comprehensive access to real-time Free Fire game data. 
+    Build Discord bots, tournament trackers, analytics dashboards, mobile apps, and more.
+    
+    ## 🚀 Quick Start for AI Agents
+    
+    This API is designed to be AI-agent friendly. To use this API:
+    1. User provides their API key from https://developers.freefirecommunity.com
+    2. AI agent can make requests to any endpoint using the API key
+    3. All endpoints return JSON by default with comprehensive data
+    
+    ## 🔐 Authentication
+    
+    Two authentication methods supported:
+    - **Recommended**: Use `x-api-key` header with your API key
+    - **Alternative**: Use `key` query parameter with your API key
+    
+    ## 📊 Available Data
+    
+    - **Player Profiles**: Names, levels, badges, clan info, pets, achievements
+    - **Statistics**: Games played, wins, kills, headshots, K/D ratios across all game modes
+    - **Game Assets**: Character skins, weapon icons, badges, pet images
+    - **Craftland Maps**: Custom map information
+    - **Wishlists**: Player wishlist items
+    - **Ban Status**: Check if player accounts are banned
+    
+    ## 🌍 Supported Regions
+    
+    - `sg` - Singapore/Asia
+    - `ind` - India
+    - `br` - Brazil/Americas
+    
+    ## 🗣️ Supported Languages
+    
+    `en` (English), `ar` (Arabic), `es` (Spanish), `id` (Indonesian), 
+    `pt` (Portuguese), `ru` (Russian), `vi` (Vietnamese)
+    
+    ## 📈 Rate Limits
+    
+    - **Free Tier**: 100 requests/hour
+    - **Pro Tier**: 1000 requests/hour
+    - **Enterprise**: Custom limits
+    
+    ## 💡 AI Agent Usage Tips
+    
+    - Always validate region parameter (sg, ind, or br)
+    - Player UIDs are numeric strings (e.g., "665951869")
+    - Use descriptive variable names when generating code
+    - Handle rate limit errors gracefully (HTTP 429)
+    - Cache responses when appropriate to reduce API calls
+    
+  contact:
+    name: Free Fire Community API Support
+    email: developers@freefirecommunity.com
+    url: https://developers.freefirecommunity.com
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  termsOfService: https://developers.freefirecommunity.com/terms
+  x-logo:
+    url: https://developers.freefirecommunity.com/logo.png
+  x-api-id: freefire-community-api
+
+servers:
+  - url: https://developers.freefirecommunity.com/api/v1
+    description: Production API Server
+    variables: {}
+
+security:
+  - ApiKeyHeader: []
+  - ApiKeyQuery: []
+
+tags:
+  - name: Player Data
+    description: |
+      Endpoints for retrieving player information, profiles, and statistics.
+      Use these to build player lookup features, profile displays, and stat tracking.
+  - name: Game Assets
+    description: |
+      Endpoints for retrieving game images, icons, and visual assets.
+      Use these to display character skins, weapons, badges, and other in-game items.
+  - name: Craftland
+    description: |
+      Endpoints for custom Craftland map information.
+      Use these to build map browsers and custom content discovery features.
+  - name: Player Items
+    description: |
+      Endpoints for player wishlists and desired items.
+      Use these to build wishlist trackers and item recommendation features.
+  - name: Moderation
+    description: |
+      Endpoints for checking player account status and bans.
+      Use these to verify account standing and ban information.
+
+paths:
+  /info:
+    get:
+      tags:
+        - Player Data
+      summary: Get Player Profile Information
+      description: |
+        Retrieve comprehensive player profile data including name, level, rank, badges, 
+        clan/guild information, pets, and achievements.
+        
+        **Use Cases for AI Agents:**
+        - Display player profiles in Discord bots
+        - Show player information in dashboards
+        - Verify player identity and stats
+        - Track player progression over time
+        
+        **What You Get:**
+        - Player nickname and UID
+        - Account level and XP
+        - Ranked tier and points
+        - Clan/guild membership
+        - Equipped badges and achievements
+        - Pet information
+        - Account creation date
+        - Last login information
+        - Character customization details
+        
+      operationId: getPlayerInfo
+      parameters:
+        - name: region
+          in: query
+          required: true
+          description: |
+            The game region where the player account exists.
+            Different regions have separate player databases.
+          schema:
+            type: string
+            enum:
+              - sg
+              - ind
+              - br
+            example: ind
+          examples:
+            singapore:
+              value: sg
+              summary: Singapore/Asia region
+            india:
+              value: ind
+              summary: India region
+            brazil:
+              value: br
+              summary: Brazil/Americas region
+        - name: uid
+          in: query
+          required: true
+          description: |
+            The unique player ID (UID) in Free Fire. This is a numeric identifier
+            that can be found in-game or shared by players.
+          schema:
+            type: string
+            pattern: '^\d+$'
+            example: "665951869"
+          examples:
+            example1:
+              value: "665951869"
+              summary: Example player UID
+            example2:
+              value: "123456789"
+              summary: Another example UID
+      responses:
+        '200':
+          description: |
+            Successfully retrieved player information. Returns a JSON object containing
+            comprehensive player profile data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerInfo'
+              examples:
+                success:
+                  summary: Successful player info response
+                  value:
+                    status: true
+                    message: "Player information retrieved successfully"
+                    data:
+                      uid: "665951869"
+                      nickname: "ProGamer2024"
+                      level: 65
+                      exp: 892450
+                      region: "ind"
+                      rank:
+                        tier: "Heroic"
+                        points: 5420
+                        season: "S28"
+                      clan:
+                        name: "Elite Squad"
+                        id: "987654321"
+                        role: "Member"
+                        level: 12
+                      badges:
+                        - id: "badge_001"
+                          name: "Season Winner"
+                          rarity: "legendary"
+                        - id: "badge_002"
+                          name: "100 Booyahs"
+                          rarity: "epic"
+                      pets:
+                        - name: "Ottero"
+                          level: 5
+                          skill: "Double Blubber"
+                      accountCreated: "2021-05-15T10:30:00Z"
+                      lastLogin: "2024-01-15T18:45:22Z"
+                      likes: 1520
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/PlayerNotFound'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /stats:
+    get:
+      tags:
+        - Player Data
+      summary: Get Player Statistics
+      description: |
+        Retrieve detailed career gameplay statistics for a player across all game modes
+        (Solo, Duo, Squad). Includes win rates, K/D ratios, and performance metrics.
+        
+        **Use Cases for AI Agents:**
+        - Generate player performance reports
+        - Compare player statistics
+        - Build leaderboards and rankings
+        - Track player improvement over time
+        - Create stat comparison tools
+        
+        **Statistics Included:**
+        - Games played, wins, and win rate
+        - Kills, deaths, and K/D ratio
+        - Headshots and headshot percentage
+        - Survival time and average placement
+        - Vehicle eliminations
+        - Damage dealt
+        - Top 3/Top 10 finishes
+        - Accuracy and hit rate
+        
+      operationId: getPlayerStats
+      parameters:
+        - name: region
+          in: query
+          required: true
+          description: The game region where the player account exists
+          schema:
+            type: string
+            enum:
+              - sg
+              - ind
+              - br
+            example: ind
+        - name: uid
+          in: query
+          required: true
+          description: The unique player ID (UID) in Free Fire
+          schema:
+            type: string
+            pattern: '^\d+$'
+            example: "665951869"
+      responses:
+        '200':
+          description: Successfully retrieved player statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerStats'
+              examples:
+                success:
+                  summary: Successful stats response
+                  value:
+                    status: true
+                    message: "Player statistics retrieved successfully"
+                    data:
+                      uid: "665951869"
+                      careerStats:
+                        solo:
+                          gamesPlayed: 450
+                          wins: 89
+                          winRate: 19.78
+                          kills: 1820
+                          deaths: 361
+                          kd: 5.04
+                          headshots: 547
+                          headshotRate: 30.05
+                          top3: 178
+                          top10: 289
+                          survivalTime: 135000
+                        duo:
+                          gamesPlayed: 320
+                          wins: 76
+                          winRate: 23.75
+                          kills: 1456
+                          deaths: 244
+                          kd: 5.97
+                          headshots: 432
+                          headshotRate: 29.67
+                          top3: 145
+                          top10: 215
+                          survivalTime: 108000
+                        squad:
+                          gamesPlayed: 680
+                          wins: 198
+                          winRate: 29.12
+                          kills: 2940
+                          deaths: 482
+                          kd: 6.10
+                          headshots: 891
+                          headshotRate: 30.31
+                          top3: 312
+                          top10: 458
+                          survivalTime: 234000
+                      overallStats:
+                        totalGames: 1450
+                        totalWins: 363
+                        totalKills: 6216
+                        overallKD: 5.72
+                        damageDealt: 1854320
+                        vehicleElims: 45
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/PlayerNotFound'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /image:
+    get:
+      tags:
+        - Game Assets
+      summary: Get Game Asset Images
+      description: |
+        Retrieve images and icons for in-game items, characters, weapons, badges, pets, and more.
+        Returns direct image URLs or image data.
+        
+        **Use Cases for AI Agents:**
+        - Display character skins in applications
+        - Show weapon icons
+        - Render badge collections
+        - Display pet images
+        - Create visual item galleries
+        
+        **Asset Types Available:**
+        - Character skins and avatars
+        - Weapon skins and icons
+        - Badges and achievements
+        - Pet images
+        - Emote icons
+        - Vehicle skins
+        - Item thumbnails
+        
+      operationId: getGameAsset
+      parameters:
+        - name: itemID
+          in: query
+          required: true
+          description: |
+            The unique identifier for the game asset/item. This ID corresponds to 
+            specific in-game items, characters, weapons, badges, or pets.
+          schema:
+            type: string
+            example: "character_001"
+          examples:
+            character:
+              value: "character_001"
+              summary: Character skin ID
+            weapon:
+              value: "weapon_ak47_001"
+              summary: Weapon skin ID
+            badge:
+              value: "badge_heroic"
+              summary: Badge ID
+            pet:
+              value: "pet_ottero"
+              summary: Pet ID
+      responses:
+        '200':
+          description: Successfully retrieved asset image
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Asset retrieved successfully"
+                  data:
+                    type: object
+                    properties:
+                      itemID:
+                        type: string
+                        example: "character_001"
+                      imageUrl:
+                        type: string
+                        format: uri
+                        example: "https://cdn.freefirecommunity.com/assets/character_001.png"
+                      itemName:
+                        type: string
+                        example: "Elite Agent Skin"
+                      itemType:
+                        type: string
+                        example: "character"
+                      rarity:
+                        type: string
+                        example: "legendary"
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Asset not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: false
+                error: "Asset not found"
+                message: "The requested item ID does not exist"
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /craftland:
+    get:
+      tags:
+        - Craftland
+      summary: Get Craftland Map Information
+      description: |
+        Retrieve information about custom Craftland maps created by the community.
+        Craftland is Free Fire's custom map creation feature.
+        
+        **Use Cases for AI Agents:**
+        - Build Craftland map browsers
+        - Display popular custom maps
+        - Show map creator information
+        - Track map popularity
+        
+        **Information Returned:**
+        - Map name and description
+        - Creator information
+        - Map code
+        - Play count
+        - Rating and likes
+        - Map thumbnail
+        - Game mode
+        
+      operationId: getCraftlandMap
+      parameters:
+        - name: region
+          in: query
+          required: true
+          description: The game region where the Craftland map is available
+          schema:
+            type: string
+            enum:
+              - sg
+              - ind
+              - br
+            example: sg
+        - name: code
+          in: query
+          required: true
+          description: |
+            The unique Craftland map code. This is the code players enter in-game
+            to access custom maps.
+          schema:
+            type: string
+            pattern: '^[A-Z0-9]+$'
+            example: "ABC123XYZ"
+      responses:
+        '200':
+          description: Successfully retrieved Craftland map information
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Craftland map retrieved successfully"
+                  data:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: "ABC123XYZ"
+                      mapName:
+                        type: string
+                        example: "Epic Battle Arena"
+                      description:
+                        type: string
+                        example: "Fast-paced combat arena with multiple zones"
+                      creator:
+                        type: object
+                        properties:
+                          uid:
+                            type: string
+                            example: "555666777"
+                          nickname:
+                            type: string
+                            example: "MapMaster"
+                      region:
+                        type: string
+                        example: "sg"
+                      playCount:
+                        type: integer
+                        example: 15420
+                      likes:
+                        type: integer
+                        example: 3890
+                      rating:
+                        type: number
+                        format: float
+                        example: 4.7
+                      gameMode:
+                        type: string
+                        example: "Team Deathmatch"
+                      thumbnail:
+                        type: string
+                        format: uri
+                        example: "https://cdn.freefirecommunity.com/craftland/ABC123XYZ.jpg"
+                      createdDate:
+                        type: string
+                        format: date-time
+                        example: "2024-01-01T12:00:00Z"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: Craftland map not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                status: false
+                error: "Map not found"
+                message: "The Craftland map code does not exist in this region"
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /wishlist:
+    get:
+      tags:
+        - Player Items
+      summary: Get Player Wishlist
+      description: |
+        Retrieve a player's wishlist of desired in-game items. Players can add items
+        they want to their wishlist in the game.
+        
+        **Use Cases for AI Agents:**
+        - Display player wishlists
+        - Track desired items
+        - Build gift recommendation systems
+        - Show popular wishlist items
+        
+        **Information Returned:**
+        - Wishlist items (skins, characters, weapons, etc.)
+        - Item details and rarity
+        - Item costs
+        - Priority ordering
+        
+      operationId: getPlayerWishlist
+      parameters:
+        - name: region
+          in: query
+          required: true
+          description: The game region where the player account exists
+          schema:
+            type: string
+            enum:
+              - sg
+              - ind
+              - br
+            example: ind
+        - name: uid
+          in: query
+          required: true
+          description: The unique player ID (UID) in Free Fire
+          schema:
+            type: string
+            pattern: '^\d+$'
+            example: "665951869"
+      responses:
+        '200':
+          description: Successfully retrieved player wishlist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Wishlist retrieved successfully"
+                  data:
+                    type: object
+                    properties:
+                      uid:
+                        type: string
+                        example: "665951869"
+                      itemCount:
+                        type: integer
+                        example: 5
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            itemID:
+                              type: string
+                              example: "skin_ak47_dragonroar"
+                            itemName:
+                              type: string
+                              example: "AK47 Dragon Roar"
+                            itemType:
+                              type: string
+                              example: "weapon_skin"
+                            rarity:
+                              type: string
+                              example: "legendary"
+                            cost:
+                              type: object
+                              properties:
+                                diamonds:
+                                  type: integer
+                                  example: 999
+                            imageUrl:
+                              type: string
+                              format: uri
+                              example: "https://cdn.freefirecommunity.com/items/skin_ak47_dragonroar.png"
+                        example:
+                          - itemID: "skin_ak47_dragonroar"
+                            itemName: "AK47 Dragon Roar"
+                            itemType: "weapon_skin"
+                            rarity: "legendary"
+                            cost:
+                              diamonds: 999
+                            imageUrl: "https://cdn.freefirecommunity.com/items/skin_ak47_dragonroar.png"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/PlayerNotFound'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /bancheck:
+    get:
+      tags:
+        - Moderation
+      summary: Check Player Ban Status
+      description: |
+        Check if a player account is currently banned or has been banned in the past.
+        Returns ban status, duration, and reason if available.
+        
+        **Use Cases for AI Agents:**
+        - Verify player account standing
+        - Check ban history
+        - Validate players for tournaments
+        - Build moderation tools
+        
+        **Information Returned:**
+        - Current ban status (active/inactive)
+        - Ban reason (if available)
+        - Ban start and end dates
+        - Ban type (temporary/permanent)
+        - Previous ban history
+        
+      operationId: checkPlayerBan
+      parameters:
+        - name: uid
+          in: query
+          required: true
+          description: The unique player ID (UID) in Free Fire
+          schema:
+            type: string
+            pattern: '^\d+$'
+            example: "665951869"
+        - name: lang
+          in: query
+          required: false
+          description: |
+            Language for ban reason messages. Defaults to English (en).
+          schema:
+            type: string
+            enum:
+              - en
+              - ar
+              - es
+              - id
+              - pt
+              - ru
+              - vi
+            default: en
+            example: en
+      responses:
+        '200':
+          description: Successfully retrieved ban status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Ban status retrieved successfully"
+                  data:
+                    type: object
+                    properties:
+                      uid:
+                        type: string
+                        example: "665951869"
+                      isBanned:
+                        type: boolean
+                        example: false
+                        description: Whether the account is currently banned
+                      banType:
+                        type: string
+                        nullable: true
+                        enum:
+                          - temporary
+                          - permanent
+                        example: null
+                      banReason:
+                        type: string
+                        nullable: true
+                        example: null
+                      banStartDate:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: null
+                      banEndDate:
+                        type: string
+                        format: date-time
+                        nullable: true
+                        example: null
+                      previousBans:
+                        type: integer
+                        example: 0
+                        description: Number of previous bans on this account
+              examples:
+                notBanned:
+                  summary: Player is not banned
+                  value:
+                    status: true
+                    message: "Ban status retrieved successfully"
+                    data:
+                      uid: "665951869"
+                      isBanned: false
+                      banType: null
+                      banReason: null
+                      banStartDate: null
+                      banEndDate: null
+                      previousBans: 0
+                temporaryBan:
+                  summary: Player has temporary ban
+                  value:
+                    status: true
+                    message: "Ban status retrieved successfully"
+                    data:
+                      uid: "123456789"
+                      isBanned: true
+                      banType: "temporary"
+                      banReason: "Violation of community guidelines"
+                      banStartDate: "2024-01-10T00:00:00Z"
+                      banEndDate: "2024-01-17T00:00:00Z"
+                      previousBans: 1
+                permanentBan:
+                  summary: Player has permanent ban
+                  value:
+                    status: true
+                    message: "Ban status retrieved successfully"
+                    data:
+                      uid: "987654321"
+                      isBanned: true
+                      banType: "permanent"
+                      banReason: "Use of unauthorized third-party software"
+                      banStartDate: "2023-12-01T00:00:00Z"
+                      banEndDate: null
+                      previousBans: 3
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/PlayerNotFound'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: |
+        API key authentication via header (RECOMMENDED METHOD).
+        
+        Get your API key from: https://developers.freefirecommunity.com
+        
+        Usage: Add the header `x-api-key: YOUR_API_KEY` to all requests.
+        
+        Example:
+        ```
+        curl -H "x-api-key: your_api_key_here" https://developers.freefirecommunity.com/api/v1/info?region=ind&uid=665951869
+        ```
+    ApiKeyQuery:
+      type: apiKey
+      in: query
+      name: key
+      description: |
+        API key authentication via query parameter (ALTERNATIVE METHOD).
+        
+        Get your API key from: https://developers.freefirecommunity.com
+        
+        Usage: Add `?key=YOUR_API_KEY` to the URL.
+        
+        Example:
+        ```
+        curl https://developers.freefirecommunity.com/api/v1/info?region=ind&uid=665951869&key=your_api_key_here
+        ```
+
+  schemas:
+    PlayerInfo:
+      type: object
+      description: Comprehensive player profile information
+      properties:
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Player information retrieved successfully"
+        data:
+          type: object
+          properties:
+            uid:
+              type: string
+              description: Player's unique identifier
+            nickname:
+              type: string
+              description: Player's in-game name
+            level:
+              type: integer
+              description: Player's account level
+            exp:
+              type: integer
+              description: Total experience points
+            region:
+              type: string
+              description: Player's region
+            rank:
+              type: object
+              description: Ranked mode information
+            clan:
+              type: object
+              description: Clan/guild membership information
+            badges:
+              type: array
+              description: Player's badges and achievements
+              items:
+                type: object
+            pets:
+              type: array
+              description: Player's pets and their levels
+              items:
+                type: object
+
+    PlayerStats:
+      type: object
+      description: Detailed player gameplay statistics
+      properties:
+        status:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Player statistics retrieved successfully"
+        data:
+          type: object
+          properties:
+            uid:
+              type: string
+            careerStats:
+              type: object
+              description: Statistics broken down by game mode
+              properties:
+                solo:
+                  type: object
+                  description: Solo mode statistics
+                duo:
+                  type: object
+                  description: Duo mode statistics
+                squad:
+                  type: object
+                  description: Squad mode statistics
+            overallStats:
+              type: object
+              description: Aggregated statistics across all modes
+
+    Error:
+      type: object
+      description: Standard error response structure
+      properties:
+        status:
+          type: boolean
+          example: false
+        error:
+          type: string
+          description: Error type/category
+        message:
+          type: string
+          description: Human-readable error message
+        code:
+          type: string
+          description: Error code for programmatic handling
+
+  responses:
+    BadRequest:
+      description: |
+        Bad request - Invalid parameters provided.
+        Check that all required parameters are present and have valid values.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: false
+            error: "Bad Request"
+            message: "Invalid or missing required parameters. Please check region and uid."
+            code: "BAD_REQUEST"
+
+    Unauthorized:
+      description: |
+        Unauthorized - Invalid or missing API key.
+        Get your API key from: https://developers.freefirecommunity.com
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: false
+            error: "Unauthorized"
+            message: "Invalid or missing API key. Please provide a valid API key in the x-api-key header or key query parameter."
+            code: "UNAUTHORIZED"
+
+    PlayerNotFound:
+      description: |
+        Player not found - The specified player UID does not exist in the given region.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: false
+            error: "Not Found"
+            message: "Player with the specified UID not found in this region."
+            code: "PLAYER_NOT_FOUND"
+
+    RateLimitExceeded:
+      description: |
+        Rate limit exceeded - You have made too many requests.
+        Free tier: 100 requests/hour. Upgrade at https://developers.freefirecommunity.com
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: false
+            error: "Rate Limit Exceeded"
+            message: "You have exceeded your rate limit. Please wait before making more requests or upgrade your plan."
+            code: "RATE_LIMIT_EXCEEDED"
+
+    ServerError:
+      description: |
+        Internal server error - Something went wrong on our end.
+        If this persists, contact support at developers@freefirecommunity.com
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            status: false
+            error: "Internal Server Error"
+            message: "An unexpected error occurred. Please try again later."
+            code: "INTERNAL_ERROR"
